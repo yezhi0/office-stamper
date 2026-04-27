@@ -44,9 +44,12 @@ class EMFMetadata extends IIOMetadata {
     @Override
     public IIOMetadataFormat getMetadataFormat() { return null; }
 
+ 
     @Override
-    public void reset() { }
+    public void reset() {
 
+    // No mutable state to reset
+    }
     @Override
     public IIOMetadataNode getAsTree() {
         return (IIOMetadataNode) getAsTree(nativeMetadataFormatName);
@@ -55,8 +58,9 @@ class EMFMetadata extends IIOMetadata {
     @Override
     public boolean isStandardMetadataFormatSupported() { return true; }
 
+    @Override
     public String getNativeMetadataFormatName() { return nativeMetadataFormatName; }
-
+    
     public void setFromTree(String formatName, Node root) {
         throw new UnsupportedOperationException();
     }
