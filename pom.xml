@@ -7,7 +7,7 @@
     <name>Office-stamper</name>
     <groupId>pro.verron.office-stamper</groupId>
     <artifactId>office-stamper</artifactId>
-    <version>3.3</version>
+    <version>3.4-SNAPSHOT</version>
     <description>
         Office-stamper is a Java library for stamping DOCX templates with data.
         It allows you to create professional documents by merging data with pre-designed templates,
@@ -30,6 +30,7 @@
 
     <modules>
         <module>engine</module>
+        <module>excel</module>
         <module>cli</module>
         <module>asciidoc</module>
         <module>utils</module>
@@ -40,7 +41,7 @@
 
     <properties>
         <docx4j.version>11.5.12</docx4j.version>
-        <javafx.version>27-ea+13</javafx.version>
+        <javafx.version>27-ea+14</javafx.version>
 
         <maven.compiler.release>25</maven.compiler.release>
         <maven.compiler.source>25</maven.compiler.source>
@@ -199,6 +200,9 @@
                     <version>3.5.5</version>
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <systemPropertyVariables>
+                            <java.awt.headless>true</java.awt.headless>
+                        </systemPropertyVariables>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -240,7 +244,7 @@
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.23.0</version>
+                    <version>1.23.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -274,7 +278,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>7.0.7</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -305,7 +308,7 @@
             <dependency>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.23.0</version>
+                <version>1.23.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -339,14 +342,14 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <!-- <reportSets>
+                <reportSets>
                     <reportSet>
                         <reports>
-                            <!- select non-aggregate reports -/>
+                            <!-- select non-aggregate reports -->
                             <report>report</report>
                         </reports>
                     </reportSet>
-                </reportSets>-->
+                </reportSets>
             </plugin>
         </plugins>
     </reporting>

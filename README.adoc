@@ -74,6 +74,38 @@ var configuration = OfficeStamperConfigurations.standard()
     .addResolver(new MyCustomResolver());
 ----
 
+== Security Modes
+
+Office-stamper is secure-by-default.
+
+- SpEL evaluation runs in a restricted mode that blocks risky features like type access (`T()`), bean resolution, constructor calls, and unrestricted static method invocation.
+- SVG parsing uses a hardened XML parser to mitigate XXE/DTD risks.
+
+You can opt into a permissive mode when working with trusted templates/inputs.
+
+[source,java]
+----
+import pro.verron.officestamper.api.SecurityMode;
+
+void main(){
+    // SpEL security mode (default: RESTRICTED)
+    var cfg = OfficeStamperConfigurations.standard()
+        .setSpelSecurityMode(SecurityMode.PERMISSIVE); // enable full SpEL capabilities for trusted templates
+
+    // SVG safe mode (default: enabled)
+    cfg.setSvgSecurityMode(SecurityMode.PERMISSIVE); // relax parser hardening for trusted SVG inputs
+}
+
+----
+
+You can also control modes via system properties:
+
+- `-Dofficestamper.spel.mode=restricted|permissive` (default: `restricted`)
+- `-Dofficestamper.svg.mode=restricted|permissive` (default: `restricted`)
+- Backward compatible: `-Dofficestamper.svg.safe=true|false` (default: `true`)
+
+Use permissive options only with fully trusted templates and assets.
+
 == Maven Coordinates
 
 [source,xml]
@@ -111,6 +143,26 @@ Comprehensive documentation is available at link:{docs}[verronpro.github.io/offi
 * link:{docs}/troubleshooting.html[Troubleshooting]
 * link:{docs}/release-notes.html[Release Notes]
 * link:{docs}/contributing.html[Contributing]
+* https://verronpro.github.io/office-stamper/cli/quickstart-windows.html[Quickstart (Windows)]
+
+== Labeling conventions
+
+To keep the issue tracker consistent and easy to query, we use a small set of prefixed labels.
+
+Labels (apply as needed)
+
+* Exactly one type:* — e.g. `type: bug`, `type: feature`, `type: docs`, `type: test`, `type: refactor`, `type: performance`, `type: security`, `type: dependencies`, `type: research`, `type: epic`
+* One or more component:* — e.g. `component: engine`, `component: asciidoc`, `component: cli`, `component: imageio`, `component: excel`, `component: utils`
+* Optional tech:* — e.g. `tech: javafx`, `tech: docx4j`, `tech: graalvm`, `tech: junit`, `tech: qodana`
+* Optional format:* — e.g. `format: docx`, `format: pptx`, `format: odf`, `format: svg`, `format: emf`, `format: wmf`, `format: png`
+* Optional platform:* — `platform: windows`, `platform: linux`, `platform: macos`
+* Optional topic:* — for cross‑cutting themes (e.g. `topic: docx preview`, `topic: packaging`, `topic: observability`)
+* Status and priority — `status: needs triage`, `status: in progress`, `status: blocked`, `status: needs review`; `priority: P0-critical`, `priority: P1-high`, `priority: P2-normal`, `priority: P3-low`
+* Optional sizing — `size: XS|S|M|L|XL`
+
+Example
+
+* `type: feature`, `component: asciidoc`, `tech: javafx`, `topic: docx preview`, `format: png`, `status: in progress`, `priority: P2-normal`
 
 == Modules
 
