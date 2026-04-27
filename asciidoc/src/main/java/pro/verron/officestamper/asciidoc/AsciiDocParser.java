@@ -7,18 +7,43 @@ import java.util.function.Function;
 
 import static pro.verron.officestamper.asciidoc.AsciiDocModel.*;
 
+/// The `AsciiDocParser` class is a utility for parsing AsciiDoc-formatted text
+/// and transforming it into structured models. It provides both static and instance-based
+/// parsing capabilities and is designed to work with inline structures within the text.
+/// ## Superclasses
+/// This class extends the following superclasses:
+/// - [Object]
+/// - [Function]
+///
+/// ## Methods
+///   - [#parse(String)]: A static method to parse an AsciiDoc string into an [AsciiDocModel].
+///   - [#apply(String)]: An instance method implementing the [Function] interface for parsing an AsciiDoc string
+/// into an `AsciiDocModel`.
+///
+/// ## Internal Behavior
+///   - [#parseInlines(String)]: A private static helper method to parse inline elements from a given text input.
 public final class AsciiDocParser
         implements Function<String, AsciiDocModel> {
 
+    /// Parses the given AsciiDoc string and produces an [AsciiDocModel] representation.
+    ///
+    /// @param asciidoc the AsciiDoc content to be parsed
+    /// @return an [AsciiDocModel] representing the parsed structure of the input AsciiDoc
     public static AsciiDocModel parse(String asciidoc) {
         return new AsciiDocParser().apply(asciidoc);
     }
 
+    /// Processes an AsciiDoc-formatted string and converts it into an `AsciiDocModel`
+    /// representation containing structured blocks such as paragraphs, headings,
+    /// lists, tables, images, code blocks, and blockquotes.
+    ///
+    /// @param asciidoc the AsciiDoc-formatted input string. It may include various types of
+    ///                 blocks (e.g., paragraphs, headings, lists, tables, etc.) and
+    ///                 formatting constructs.
+    /// @return an [AsciiDocModel] object representing the parsed blocks and their
+    ///         structure in the input string. Returns an empty model if the input is blank.
     public AsciiDocModel apply(String asciidoc) {
-        var blocks = new ArrayList<Block>();
-        if (asciidoc == null || asciidoc.isBlank()) {
-            return AsciiDocModel.of(blocks);
-        }
+        if (asciidoc.isBlank()) return AsciiDocModel.of(new ArrayList<>());
 
         String[] lines = asciidoc.split("\r?\n");
         StringBuilder currentParagraph = new StringBuilder();
@@ -29,6 +54,7 @@ public final class AsciiDocParser
         List<Row> currentTableRows = new ArrayList<>();
         StringBuilder currentBlockContent = new StringBuilder();
 
+        var blocks = new ArrayList<Block>();
         for (String line : lines) {
             String trimmed = line.trim();
 
@@ -237,9 +263,7 @@ public final class AsciiDocParser
         var stack = new ArrayList<Frame>();
         stack.add(root);
 
-        if (text == null || text.isEmpty()) {
-            return root.children;
-        }
+        if (text.isEmpty()) return root.children;
 
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
